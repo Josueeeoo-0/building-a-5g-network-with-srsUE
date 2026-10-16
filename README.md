@@ -6,6 +6,10 @@ Instala una red 5G SA completamente software en una VM con **Open5GS nativo, OCU
 
 Fuente de la figura: [tutorial oficial de OCUDU](https://docs.ocudu.org/tutorials/srsue/).
 
+**Arquitectura detallada del laboratorio implementado**
+
+![Arquitectura detallada del laboratorio 5G SA](assets/ocudu-zmq-mejorado.jpg)
+
 ## Configuración del laboratorio
 
 | Componente | Configuración |
