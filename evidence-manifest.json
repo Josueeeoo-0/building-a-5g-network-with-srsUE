@@ -1,0 +1,521 @@
+{
+  "description": "Archivos originales del autor e imágenes recibidas; SHA-256 antes de publicación.",
+  "files": [
+    {
+      "kind": "final_configuration",
+      "source": "amf.yaml",
+      "path": "config/open5gs/amf.yaml",
+      "sha256": "2b68144e2a0bad9e08c55f0c8ce0dead94644755647f0c0544067f98954a821b"
+    },
+    {
+      "kind": "final_configuration",
+      "source": "nrf.yaml",
+      "path": "config/open5gs/nrf.yaml",
+      "sha256": "6792b71d1d44e9c9a5ef85e05565535aa3afa459a9e27f07cd359426b2fc2cf8"
+    },
+    {
+      "kind": "final_configuration",
+      "source": "smf.yaml",
+      "path": "config/open5gs/smf.yaml",
+      "sha256": "37f6c58d80ea44e7e2cbd4a8480b1d676301ca8233ebaae1ce866e17d900dd43"
+    },
+    {
+      "kind": "final_configuration",
+      "source": "upf.yaml",
+      "path": "config/open5gs/upf.yaml",
+      "sha256": "51d672594e8f4071215708e011313afacce8aaa4d1cd7d4fd7c6fd1ea44d7030"
+    },
+    {
+      "kind": "final_configuration",
+      "source": "gnb_zmq.yaml",
+      "path": "config/gnb_zmq.yaml",
+      "sha256": "0eb92b7583bbce343b054ff83d2e88fd9e33c209439b11678da685c6c7f1f26c"
+    },
+    {
+      "kind": "final_configuration",
+      "source": "ue_zmq.conf",
+      "path": "config/ue_zmq.conf",
+      "sha256": "3a2d32d5ab8635aab9a9832b4c4643358f93fdda31f02404063559dcaf332338"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_1.png",
+      "path": "images/install/open5gs/01.png",
+      "sha256": "59e18433583ea8ae2ac1e008479226826dcdef599282f4ea9b0653c7a4318203"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_2.png",
+      "path": "images/install/open5gs/02.png",
+      "sha256": "538b8cff123e9572cd2c5a64fcda317ec237b7901b0f412128e53db4c93b4739"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_3.png",
+      "path": "images/install/open5gs/03.png",
+      "sha256": "ae4328014446e169929b0f905c1fad35a81925c9c52b9935d3701251529520b5"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_4.png",
+      "path": "images/install/open5gs/04.png",
+      "sha256": "598a5edd00b899ee90b2aecf52fbfcf745795ada2dd196f11bfabe07937c0304"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_5.png",
+      "path": "images/install/open5gs/05.png",
+      "sha256": "a35f8acaeb5f36e03a43952f79d63dd3d01c26aa02a00a4874b88ab030521fe6"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_6.png",
+      "path": "images/install/open5gs/06.png",
+      "sha256": "23ea7b0914514e977f0c537211314776482cf975248c526ff150bf1e6f0a3afd"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_7.png",
+      "path": "images/install/open5gs/07.png",
+      "sha256": "1dca2141c2f232c7dffd289f5d6593545268cb51ac55d23f31cdce428e00b164"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_8.png",
+      "path": "images/install/open5gs/08.png",
+      "sha256": "af121bcba7834c0945ad042d367ef28751b636bf7b96f3ce1be0743d67259077"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_9.png",
+      "path": "images/install/open5gs/09.png",
+      "sha256": "e04926902a75c333ca0b12958303eb52acd8dad417d6f97573a3d254cc1c8ca1"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_10.png",
+      "path": "images/install/open5gs/10.png",
+      "sha256": "7adf699ceb9fb80ac10b92f27bbca6f56fa6fccc2ef5634b82e2a04489ce8b77"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_11.png",
+      "path": "images/install/open5gs/11.png",
+      "sha256": "4ca51a4431dd1fa75da779e343d5040de106b8c7f52e2f7f32aa4d9e04f4b298"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_12.png",
+      "path": "images/install/open5gs/12.png",
+      "sha256": "ac7b7462d4868cae3debc4a138afa4e81481b902fb8564a16ebdef3aa1f4c6da"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_13.png",
+      "path": "images/install/open5gs/13.png",
+      "sha256": "474c1c6fd06f8fb6ec7d3e05072ac85b2fd30b31e10b3c1e12a11812a8834295"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_14.png",
+      "path": "images/install/open5gs/14.png",
+      "sha256": "ec56b60be0c7dd644f3b34bc669ccbf9ed734e2251382f846ab2b9b76e9c687d"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_15.png",
+      "path": "images/install/open5gs/15.png",
+      "sha256": "7f1657ef418806315214d03b3d26466b8bf8412d804ed3a13877471569b37aa5"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_16.png",
+      "path": "images/install/open5gs/16.png",
+      "sha256": "1b71c6263141f4ec5a74892d22e248a41542699bc2a9a826513595244eb30681"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_17.png",
+      "path": "images/install/open5gs/17.png",
+      "sha256": "76625138b582ab0f74a75ce36b9282c11ed45fcd50ee29cbb5fa2bff1fdd24e8"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_18.png",
+      "path": "images/install/open5gs/18.png",
+      "sha256": "6ea70e25ad5735425fe35bcc2f8d70562236bd0113e224d483e8e1498528aa28"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_19.png",
+      "path": "images/install/open5gs/19.png",
+      "sha256": "1eb47b46ee591647790103bdd321a079c9e5795865eaa34812517a5ac1fe86ad"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_20.png",
+      "path": "images/install/open5gs/20.png",
+      "sha256": "0e39d3b009bf8c2acd48dcfd22bf10dfb4f7e0fe23100000ad843ca5908a0cee"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_21.png",
+      "path": "images/install/open5gs/21.png",
+      "sha256": "27051f3a3aa89859d3974f514a41b5fdd4c59061b2dbc82374f8d75ee7251ecb"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_22.png",
+      "path": "images/install/open5gs/22.png",
+      "sha256": "4a476d040d71cc461408a6478392fb8d1269f23e414b942fb2620c61071d353f"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_23.png",
+      "path": "images/install/open5gs/23.png",
+      "sha256": "15a10d8c10bca6bc52445663ce8f3a1a2784156fed0e52c2854199c65c356a38"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_24.png",
+      "path": "images/install/open5gs/24.png",
+      "sha256": "9af600c05f4e740c0e139ab6ed7c0349f675d28f6880ac4fd3573192e15140f5"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_25.png",
+      "path": "images/install/open5gs/25.png",
+      "sha256": "f9e2e41d7808ba922756038aefdd49697285ba83bf88b6eb93e6a23f0d128b5f"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_26.png",
+      "path": "images/install/open5gs/26.png",
+      "sha256": "61d2e2c22498cf51e8145a3bc16d5446010cb05e0903437a2876586a5a970b9e"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_27.png",
+      "path": "images/install/open5gs/27.png",
+      "sha256": "e5188bc6bbffd41fe22df00944274bcc969ac495776cf798fff9c0a492ef96bf"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_28.png",
+      "path": "images/install/open5gs/28.png",
+      "sha256": "2810f9aba914d73ffac70caa0b5df172e1a042ff334859695f00c90682f48ee3"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_29.png",
+      "path": "images/install/open5gs/29.png",
+      "sha256": "3c90f231a27582cc1854feb8b1256987cdc4d7ec04a96ae47560828d4f2aff93"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_1.png",
+      "path": "images/install/ocudu/01.png",
+      "sha256": "ab1533487cf91cc9435f785aba04badc54c7bf91c0b9c91505d30781e41cedc4"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_2.png",
+      "path": "images/install/ocudu/02.png",
+      "sha256": "c1e89f9e190f45b76c7d9ba25e8717f538fb444a7342d21a974a62cbc8f0b2e2"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_3.png",
+      "path": "images/install/ocudu/03.png",
+      "sha256": "b17dbda1e2596d22d9d6649164af3d198c4f872c916d56b4c67efd34db600e7e"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_4.png",
+      "path": "images/install/ocudu/04.png",
+      "sha256": "0847e68f819b9a96d08b000cd88f6a0c0b9d5009822c47fbe8a164171db65eb6"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_5.png",
+      "path": "images/install/ocudu/05.png",
+      "sha256": "1fc3f5a481495bbeefb17e880b2ceeec58a72e999d2d0d4718195e8fc9fafd23"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_6.png",
+      "path": "images/install/ocudu/06.png",
+      "sha256": "86642fa3b271e304907bf6679554c29bf2cbf5b7ce8ccc0825ed9d3b18536fa2"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_7.png",
+      "path": "images/install/ocudu/07.png",
+      "sha256": "c357c16a1991748a020de57f0ab52624d4e6a15813a81d831c23b6ba107a6185"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_8.png",
+      "path": "images/install/ocudu/08.png",
+      "sha256": "be99a32701e839fe8e45b8e557064b10762427d1a2ddf1fda472a75c349d3555"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_9.png",
+      "path": "images/install/ocudu/09.png",
+      "sha256": "2d1eed20107a90eb5b5357b2136c212b1abb4872e34ba54c2ad30b8a2ff66719"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_10.png",
+      "path": "images/install/ocudu/10.png",
+      "sha256": "f99cc2d52643d281a24a00dce0bbbb721b2e70f2d2ef29cdd4d271657a1b6738"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_11.png",
+      "path": "images/install/ocudu/11.png",
+      "sha256": "c3858b80741ecc70c75981c26cc71a92ad81e03ba08570e639656b46edfc09fb"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_12.png",
+      "path": "images/install/ocudu/12.png",
+      "sha256": "cfa87edfe7475bb0cf51c3ad685b835faa966edc264fc8ec566a541911fcf359"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_13.png",
+      "path": "images/install/ocudu/13.png",
+      "sha256": "45ae4daaf9c6f23097fa1976f1761e0df6032fad228f5ac404e343ba295bd610"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_14.png",
+      "path": "images/install/ocudu/14.png",
+      "sha256": "cae93c47ba507eee071809583cb4347f822e67f04cbbedc85756b21a638b08f4"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_15.png",
+      "path": "images/install/ocudu/15.png",
+      "sha256": "be9aca5859892b6d3fc0bb43d35219d470d6792b9e277a74e790876363f65016"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_0.png",
+      "path": "images/install/srsran4g/00.png",
+      "sha256": "02e620013b6ae3986bba19c6f39a50b65660c7699c0760a0341037e22b2d2831"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_1.png",
+      "path": "images/install/srsran4g/01.png",
+      "sha256": "43a4d5728a272b8014218b38ad479925ed714a3b1506759b5a663bdd461d8b21"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_2.png",
+      "path": "images/install/srsran4g/02.png",
+      "sha256": "2132f6affc0b9b3904874d3fc700c3af4428af55363eb87a0d220c7f99f5669a"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_3.png",
+      "path": "images/install/srsran4g/03.png",
+      "sha256": "68b0093dc3293aaec88a7582b0e26ad16ab512c7928ccdf8da94f589806339f3"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_4.png",
+      "path": "images/install/srsran4g/04.png",
+      "sha256": "f08d71a37a30185b36258a9aca9c66695c795115a45598824b354adc5f4e51f9"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_5.png",
+      "path": "images/install/srsran4g/05.png",
+      "sha256": "2156a7f9773c4ad00f4cc6dd7ffeffbb6c716555cb39900fd5d6b453e96553ed"
+    },
+    {
+      "kind": "installation_evidence",
+      "source": "Screenshot_6.png",
+      "path": "images/install/srsran4g/06.png",
+      "sha256": "340732acd3be3dbd0e0bd009f9a37c851205f3df39b17816b7365d4874744cfe"
+    },
+    {
+      "kind": "connection_evidence",
+      "source": "codex-clipboard-9e2f01ca-ccff-4a8c-a154-7736af6f08a6.png",
+      "path": "images/connection/01.png",
+      "sha256": "f909cc4057b3ebb70da0c25b362b77a87447eaa6575a2d5feeff6486b8bb27e5"
+    },
+    {
+      "kind": "connection_evidence",
+      "source": "codex-clipboard-c79b9054-037f-4a13-b889-431e17e0d80d.png",
+      "path": "images/connection/02.png",
+      "sha256": "e9f8a0d0e44a2a93ebd37f8dac0fc80f2452b6b0e51b1744bad98d713925f4a2"
+    },
+    {
+      "kind": "connection_evidence",
+      "source": "codex-clipboard-513e4ba5-db2e-4156-9a07-1472fc58b089.png",
+      "path": "images/connection/03.png",
+      "sha256": "2578976f834b0c1aff056513bb6dd385e172badbb733dc513ca4a87534c25ba4"
+    },
+    {
+      "kind": "connection_evidence",
+      "source": "codex-clipboard-48ccca5f-9397-4023-aa90-bd89837b0658.png",
+      "path": "images/connection/04.png",
+      "sha256": "2f2c55ff0fedab7fc55c8cd09d6d3d776140e39191bc6841370b941f372f4cc7"
+    },
+    {
+      "kind": "connection_evidence",
+      "source": "codex-clipboard-aa371b1b-c469-4411-be6f-62d86c55542e.png",
+      "path": "images/connection/05.png",
+      "sha256": "69b3e8496126188cd4a416c43a928633d2a566e3a913a5987267d828d899a2bf"
+    },
+    {
+      "kind": "connection_evidence",
+      "source": "codex-clipboard-4034875e-aa4c-4ec4-8d7e-d5d4fe306146.png",
+      "path": "images/connection/06.png",
+      "sha256": "2269cb6161b4b41a747eeec324e9460e961b57cdacf1482559d1395311b93900"
+    },
+    {
+      "kind": "connection_evidence",
+      "source": "codex-clipboard-e972ec0c-42a6-4c5b-aeee-e5ff3cdd8098.png",
+      "path": "images/connection/07.png",
+      "sha256": "4047909488e6eaa0807ec8519d980cb3f081d61fba0a1b7df95b2366e338f33a"
+    },
+    {
+      "kind": "connection_evidence",
+      "source": "codex-clipboard-b40812ba-6f97-416d-8cf9-0db35b5838e8.png",
+      "path": "images/connection/08.png",
+      "sha256": "2269cb6161b4b41a747eeec324e9460e961b57cdacf1482559d1395311b93900"
+    },
+    {
+      "kind": "connection_evidence",
+      "source": "codex-clipboard-e22d52bd-fcc3-460b-ac60-829195dee19b.png",
+      "path": "images/connection/09.png",
+      "sha256": "6954ac691b674a256d3cedd906d5c87e5e62db4d05df4adb8da550ac780ab374"
+    },
+    {
+      "kind": "connection_evidence",
+      "source": "codex-clipboard-ca328bec-8ab3-48c1-8a20-bf46b5011fa4.png",
+      "path": "images/connection/10.png",
+      "sha256": "42ccd675f407942eae6d85529332fa5ba9740919ee8c528b78387b94d3279147"
+    },
+    {
+      "kind": "connection_evidence",
+      "source": "codex-clipboard-e1665e79-158f-4f5e-b83e-34256424edfb.png",
+      "path": "images/connection/11.png",
+      "sha256": "4b10cd747c5e1546c429841846ad5c86269bacb968790184ef31d7b64c893cfa"
+    },
+    {
+      "kind": "connection_evidence",
+      "source": "codex-clipboard-0a8f01c6-8676-4183-9652-43149cde27d7.png",
+      "path": "images/connection/12.png",
+      "sha256": "2f46ba458501398547eeb3a9cf93ae222faaef0ccfa7af0b85b25e7230216656"
+    },
+    {
+      "kind": "connection_evidence",
+      "source": "codex-clipboard-d533e990-eb63-4b9c-a333-6588a4864410.png",
+      "path": "images/connection/13.png",
+      "sha256": "22bb8f3f04294d5e9ad1fcf7bf2d7dcf197903435fb758115c942e6390f172c3"
+    },
+    {
+      "kind": "connection_evidence",
+      "source": "codex-clipboard-f7dc2785-e7d8-4396-856f-19000146f380.png",
+      "path": "images/connection/14.png",
+      "sha256": "fd517e5fac510282c5e11d25cc04f7e16c703c38fc31fbb151d1a68497206e57"
+    },
+    {
+      "kind": "connection_evidence",
+      "source": "codex-clipboard-7f8db8b5-2e0b-4679-b5ae-6ff1cfe0fe36.png",
+      "path": "images/connection/15.png",
+      "sha256": "9877905ba4c40a9d986d9c35d5af7105391abfd554df58d4ba1f0f6ab102c59d"
+    },
+    {
+      "kind": "connection_evidence",
+      "source": "codex-clipboard-8fd2f14b-0f15-46b4-a0f1-0b8bd0b9ca27.png",
+      "path": "images/connection/16.png",
+      "sha256": "b70b10c5fb8a486c542954e61c0b62c336ff13a50d6b72d40f61eab115df5ece"
+    },
+    {
+      "kind": "connection_evidence",
+      "source": "codex-clipboard-8f218ddb-7e54-402d-8656-caff8ef1ead4.png",
+      "path": "images/connection/17.png",
+      "sha256": "ad004d2d925321ad74ce47185bcd212d71ddcfc7b6abbe5206938239ed2a736c"
+    },
+    {
+      "kind": "connection_evidence",
+      "source": "codex-clipboard-678f1755-2c5a-4495-bdc6-2c17e2da59d6.png",
+      "path": "images/connection/18.png",
+      "sha256": "57bffb603a90df0d9b390f745bff8e6a4ac9157b659c026e7f856ba88247b8b5"
+    },
+    {
+      "kind": "connection_evidence",
+      "source": "codex-clipboard-5b2ad3b6-9fab-4bfa-815a-23594291ce89.png",
+      "path": "images/connection/19.png",
+      "sha256": "d643ab9ee0a6e1f58cf2a80723c68f55ea8efdf90f797e4d4cd6a5f5b12345ff"
+    },
+    {
+      "kind": "connection_evidence",
+      "source": "codex-clipboard-260d7680-2278-41fc-ba39-c41a92d77bdd.png",
+      "path": "images/connection/20.png",
+      "sha256": "ed1df74b5d72c5e13aca0148fd23ea9737daff877a297b82e58c29337c323dbc"
+    },
+    {
+      "kind": "connection_evidence",
+      "source": "codex-clipboard-509dcb47-b33e-4688-94c3-0ba1da0ba685.png",
+      "path": "images/connection/21.png",
+      "sha256": "f8cf30fd440dd8cabdbf245856c371754997aa0df564abd6a7c0148423f7d447"
+    },
+    {
+      "kind": "connection_evidence",
+      "source": "codex-clipboard-5c708717-86ee-4b9e-8435-b56a7a0d154a.png",
+      "path": "images/connection/22.png",
+      "sha256": "1ab9d89f82d4bbc71d0c06197a1e755a11e2f162bd017b0dc052cf5bfce68ef0"
+    },
+    {
+      "kind": "connection_evidence",
+      "source": "codex-clipboard-48a07c5c-8398-46fd-8c12-7f79547a0987.png",
+      "path": "images/connection/23.png",
+      "sha256": "8d6dc543db9d52270d9e9fe304fe6cad386d2978259ee3664c680ce17223bd1f"
+    },
+    {
+      "kind": "connection_evidence",
+      "source": "codex-clipboard-63094cb6-645d-49a2-aa76-3ec2fc4a4650.png",
+      "path": "images/connection/24.png",
+      "sha256": "f739eb77a2f9c4563c1b650bee0302bcd8085c8cd400a617b213bfdfaf5e3c0e"
+    },
+    {
+      "kind": "connection_evidence",
+      "source": "codex-clipboard-dfadbfcf-07fd-45e3-92e9-e9eed8442639.png",
+      "path": "images/connection/25.png",
+      "sha256": "acd2cfd22c6e1b2f8c5571aed4931bd7f46579cdf160ba57542726c17c22c95e"
+    },
+    {
+      "kind": "connection_evidence",
+      "source": "codex-clipboard-4048b6a5-1c88-4858-894f-9dee6bfe8fec.png",
+      "path": "images/connection/26.png",
+      "sha256": "a80947a56bc30ead83c4fcc755768e243d8b720cd5d8554f7bc5cb6dc55e44f5"
+    },
+    {
+      "kind": "connection_evidence",
+      "source": "codex-clipboard-23ac5967-9708-45b5-8c70-ad3d30d64441.png",
+      "path": "images/connection/27.png",
+      "sha256": "5bdab75b71ad0ff728a5bec9ecb25c5cc67a5e9e7269669198d4b0ffba871ee1"
+    },
+    {
+      "kind": "connection_evidence",
+      "source": "codex-clipboard-94c6fd4a-f186-4a7d-b223-33ebe2f7170a.png",
+      "path": "images/connection/28.png",
+      "sha256": "9bdb325de7d935742c1eac236068b78c56fcb4a7c709ba2994f25e1938b6bef1"
+    },
+    {
+      "kind": "connection_evidence",
+      "source": "codex-clipboard-8da73b2a-18b9-43f2-9d45-cbf6e35dff92.png",
+      "path": "images/connection/29.png",
+      "sha256": "94e261d755c9b8e06136b9c153048ec6094610c1ad8f9028c3cc6d282ce8b302"
+    }
+  ]
+}

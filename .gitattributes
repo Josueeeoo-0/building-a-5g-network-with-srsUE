@@ -1,0 +1,8 @@
+*.md text eol=lf
+*.sh text eol=lf
+*.json text eol=lf
+config/** -text
+# Preserve the original upstream comment's final space without flagging it as a new edit.
+config/open5gs/upf.yaml whitespace=-blank-at-eol
+*.png binary
+*.pdf binary
