@@ -64,6 +64,8 @@ dragonos-5g-sa-zmq/
 │   ├── evidencias.md
 │   ├── errores.md
 │   ├── procedencia.md
+│   ├── complementos.md
+│   ├── imagenes.md
 │   ├── pendientes.md
 │   └── publicar-github.md
 ├── images/
@@ -74,6 +76,21 @@ dragonos-5g-sa-zmq/
 ```
 
 El ZIP entregado contiene esta estructura sin metadatos `.git`. Se puede usar como copia descargable del tutorial.
+
+El README no inserta imágenes. Para añadir después la figura oficial, guarda el archivo como `assets/ocudu-zmq.jpg` y sigue [estas instrucciones](imagenes.md). El JPG queda pendiente de que lo agregues tú; no hay un enlace de imagen roto ni un archivo ficticio en el paquete.
+
+## Actualizar un repositorio que ya subiste
+
+Extrae el ZIP corregido y copia su contenido sobre tu carpeta local del tutorial, conservando tu carpeta `.git`. Los archivos de configuración e imágenes originales se mantienen. Después, desde esa carpeta en Git Bash:
+
+```bash
+git add .
+git diff --cached --stat
+git commit -m "Ordenar tutorial y retirar imágenes del README"
+git push
+```
+
+Estos comandos presuponen que ya hiciste el primer push y configuraste `origin`. Si aún no lo hiciste, usa los pasos de publicación anteriores.
 
 ## Detalles opcionales de publicación
 

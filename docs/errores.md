@@ -106,7 +106,7 @@ sudo ip netns exec ue1 ip route
 
 - Si no existe `ue1`, créalo antes de arrancar srsUE.
 - Si aparece `Failed to setup/configure GW interface`, comprueba que el namespace existe, que ejecutaste srsUE con privilegios y que TUN está disponible. RRC conectado por sí solo no demuestra una interfaz de datos funcional.
-- Si la interfaz existe y la ruta ya está, `File exists` al repetir `ip route add` no significa que la ruta falló. El tutorial emplea `ip route replace`.
+- Si la interfaz existe y la ruta ya está, `File exists` al repetir `ip route add` no significa que la ruta falló. El README conserva `add`, tal como en la captura; la alternativa `replace` está en los complementos.
 - `ping 10.45.0.2` no comprueba al UE de la sesión que recibió `10.45.0.3`. Relee la dirección actual.
 
 La captura de conexión 26 contiene un aviso GW; la 22 muestra una sesión PDU y la 28 contiene ping correcto. Son momentos distintos. No existe una transcripción completa que permita inventar el comando específico que reparó aquel aviso.

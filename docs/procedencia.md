@@ -23,20 +23,24 @@ La [galería](evidencias.md) conserva el orden de cada carpeta. `evidence-manife
 | ¿Qué binario UE? | Capturas de instalación: antiguo 23.4.0 en PATH; nuevo 25.10.0 en el árbol de compilación. |
 | ¿DragonOS equivale a Ubuntu Focal? | No se asume: APT muestra Jammy. Falta una captura de `/etc/os-release`, por eso la guía exige comprobarlo antes de añadir repositorios. |
 
-## Ajustes editoriales al procedimiento
+## Orden y fidelidad de los comandos
 
-Estos cambios mejoran la repetición, pero no se presentan como comandos históricos fotografiados:
+El README corregido respeta la secuencia de las carpetas recibidas. Para el core: **MongoDB → Node.js → Open5GS → WebUI**. Después continúa con OCUDU, la actualización srsRAN 4G y los pasos de conexión.
 
-1. Se completa la importación de la clave pública de MongoDB que faltaba en las imágenes.
-2. Se añade `enable --now` para MongoDB; la captura lo mostraba activo pero no habilitado al arranque.
-3. Se descargan los instaladores de Node/WebUI a un archivo antes de ejecutarlos, en lugar de una tubería `curl | bash`.
-4. Se fijan los commits completos de OCUDU y srsRAN 4G. Se resolvieron a partir de los identificadores de las capturas mediante las APIs públicas de sus repositorios.
-5. Se omite el checkout inicial de `release_23_11`, ya que la compilación que se usó después fue la revisión de `master` indicada en `versions.json`.
-6. Se hace explícito `Release` y ZeroMQ para construir srsUE; se propone `-j2` en lugar del paralelismo ilimitado respecto de la RAM disponible.
-7. No se repite la eliminación recursiva del árbol `srsRAN_4G_ocudu` que aparece antes del clon histórico. Se indica partir de un directorio nuevo o inspeccionar el existente.
-8. Se usa una copia de seguridad fechada antes de instalar configuraciones del core.
-9. Se usa `ip route replace` en lugar de `add` para poder repetir la ruta.
-10. Se proponen pruebas iPerf3 completas y moderadas, separadas de los resultados parciales históricos.
+Se restauran los comandos fotografiados: `apt-get` donde así aparece, `start` y `status` para MongoDB, los instaladores `curl | sudo -E bash -`, la comprobación inicial de `release_23_11` y el cambio a `master`, `cmake ..`, `cmake --build . -j"$(nproc)"`, edición del core con `nano` e `ip route add`.
+
+Los intentos fallidos de PPA y DNS se identifican en su lugar cronológico. No se presentan como pasos exitosos ni se ejecutan aquí. Las consultas decorativas con `echo` no son necesarias para reproducir los comandos de inspección.
+
+## Complementos separados
+
+1. La importación de la clave MongoDB, ausente de las capturas, se identifica como complemento previo necesario si falta el keyring.
+2. La consulta adicional de la base del sistema se etiqueta antes de añadir repositorios.
+3. Los checkouts por SHA, la preparación adicional de dependencias, el inicio automático MongoDB, la copia automatizada de YAML, `ip route replace` y las pruebas iPerf3 propuestas están separados en [complementos](complementos.md).
+4. La eliminación recursiva previa al clon srsRAN se registra como historial, no como un requisito de instalación sobre una carpeta existente.
+5. Los heredocs del README crean los archivos con sus **valores finales** de 5 MHz; no reproducen como configuración definitiva los valores iniciales fallidos de 20 o 10 MHz.
+6. Los argumentos completos del cliente iPerf3 no son visibles. El README lo indica y ofrece un comando mínimo de ejemplo, sin atribuirle una transcripción inexistente.
+
+Las capturas se conservan en la galería separada y no se insertan en el README. El espacio para la figura oficial y la ruta futura del JPG se describen en [imágenes](imagenes.md).
 
 ## Alcance de la comprobación
 
