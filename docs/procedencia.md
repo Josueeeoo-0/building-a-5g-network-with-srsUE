@@ -40,7 +40,7 @@ Los intentos fallidos de PPA y DNS se identifican en su lugar cronológico. No s
 5. Los heredocs del README crean los archivos con sus **valores finales** de 5 MHz; no reproducen como configuración definitiva los valores iniciales fallidos de 20 o 10 MHz.
 6. Los argumentos completos del cliente iPerf3 no son visibles. El README lo indica y ofrece un comando mínimo de ejemplo, sin atribuirle una transcripción inexistente.
 
-Las capturas se conservan en la galería separada y no se insertan en el README. El espacio para la figura oficial y la ruta futura del JPG se describen en [imágenes](imagenes.md).
+Las capturas se conservan en la galería separada. El README es un tutorial práctico sin referencias a su numeración y muestra únicamente la figura oficial, incluida como `assets/ocudu-zmq.jpg`. La ubicación e inserción se describen en [imágenes](imagenes.md).
 
 ## Alcance de la comprobación
 

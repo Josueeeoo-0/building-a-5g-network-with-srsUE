@@ -1,41 +1,31 @@
 # Red 5G SA con OCUDU, srsUE y Open5GS en DragonOS
 
-Tutorial paso a paso para montar una red 5G SA completamente software en una VM: **Open5GS nativo + OCUDU gNB + srsUE por ZeroMQ**, sin Docker ni equipos de radio.
+Instala una red 5G SA completamente software en una VM con **Open5GS nativo, OCUDU gNB y srsUE**, conectados mediante **ZeroMQ**. No requiere Docker ni equipos de radio.
 
-La ejecución documentada usa **DragonOS Focal R37**, un canal de **5 MHz**, **25 PRB** y una tasa de muestreo de **5,76 MS/s**. Incluye los archivos finales del laboratorio, las capturas de instalación y las pruebas de conectividad.
+![Arquitectura ZeroMQ de OCUDU](assets/ocudu-zmq.jpg)
 
-<!-- FIGURA PRINCIPAL RESERVADA: assets/ocudu-zmq.jpg -->
+Fuente de la figura: [tutorial oficial de OCUDU](https://docs.ocudu.org/tutorials/srsue/).
 
-**Espacio reservado para la figura oficial de OCUDU.** Guarda el JPG en `assets/ocudu-zmq.jpg`. La inserción queda desactivada hasta que agregues el archivo; consulta [cómo colocar la figura](docs/imagenes.md).
+## Configuración del laboratorio
 
-[Capturas en orden](docs/evidencias.md) · [Solución de errores](docs/errores.md) · [Publicar este repositorio](docs/publicar-github.md)
-
-## 00. Alcance y resultado
-
-Este trabajo adapta el [tutorial oficial de OCUDU con srsUE](https://docs.ocudu.org/tutorials/srsue/). La organización está inspirada en [my-srsproject-demo](https://github.com/devopsjourney23/my-srsproject-demo); los comandos y archivos se adaptan a la instalación nativa de este laboratorio.
-
-| Aspecto | Configuración documentada |
+| Componente | Configuración |
 |---|---|
-| Sistema declarado | DragonOS Focal R37 en VirtualBox |
-| Base observada en APT | Repositorios Ubuntu **jammy / 22.04**; comprobar el sistema antes de añadir repositorios |
-| Recursos finales asignados | 5 vCPU y 10 GB de RAM; no son requisitos mínimos medidos |
-| Core | Open5GS 2.8.0 instalado por paquetes, con systemd |
-| gNB | OCUDU 26.10.0, commit `b78d09a77a` |
-| UE nuevo | srsRAN 4G / srsUE 25.10.0, commit `bef8680d5` |
-| UE anterior en el PATH | srsUE 23.4.0 en `/usr/local/bin/srsue` |
-| Celda | n3 FDD, SCS 15 kHz, 5 MHz, 25 PRB |
-| PLMN / TAC / slice | `00101` / `7` / SST `1` |
+| Sistema | DragonOS Focal R37 en VirtualBox; repositorios Jammy / Ubuntu 22.04 |
+| Recursos de la VM | 5 vCPU y 10 GB de RAM |
+| Open5GS | 2.8.0, instalación nativa con systemd |
+| OCUDU | 26.10.0, revisión `b78d09a77a` |
+| srsUE | 25.10.0, revisión `bef8680d5` |
+| Celda | Banda n3 FDD, 5 MHz, SCS 15 kHz, 25 PRB |
+| Muestreo | 5,76 MS/s en gNB y UE |
+| Identidad | PLMN `00101`, TAC `7`, SST `1` |
 | Sesión | DNN `internet`, IPv4, 5QI `9` |
-| Resultado observado | Sesión PDU con IP `10.45.0.3`; ping en ambos sentidos con 4/4 respuestas |
 
-Los archivos de `config/` son los entregados desde la VM, no una reconstrucción del chat. Los comandos se presentan en la secuencia de las capturas. Los intentos fallidos están identificados y los pasos que no quedaron fotografiados se marcan como complementos. Las configuraciones de conexión usan los valores finales que funcionaron. Consulta [procedencia y verificación](docs/procedencia.md).
-
-El laboratorio fue ejecutado por su autor y está respaldado por capturas. Esta edición del tutorial se verificó estáticamente; no se reinstaló la VM durante su preparación. La IP del UE puede cambiar en cada sesión. Las capturas parciales de iPerf3 no permiten afirmar un rendimiento sostenido ni acceso a Internet externo.
+Los archivos completos están en [config/](config/). La instalación sigue este orden: **MongoDB → Node.js → Open5GS → WebUI → OCUDU → srsRAN 4G**. Después se configura y se prueba la conexión.
 
 ## Contenido
 
 1. [Entorno del laboratorio](#01-entorno-del-laboratorio)
-2. [Instalación del core: MongoDB, Node.js, Open5GS y WebUI](#02-instalar-el-core)
+2. [INSTALACION DE OPEN5GS](#02-instalacion-de-open5gs)
 3. [Comprobar los servicios y las interfaces](#03-comprobar-los-servicios-y-las-interfaces)
 4. [Compilar OCUDU](#04-compilar-ocudu)
 5. [Actualizar srsRAN 4G](#05-actualizar-srsran-4g)
@@ -49,13 +39,13 @@ El laboratorio fue ejecutado por su autor y está respaldado por capturas. Esta 
 13. [Detener y volver a arrancar](#13-detener-y-volver-a-arrancar)
 14. [Referencias](#14-referencias)
 
-Todos los comandos de instalación y conexión se ejecutan en **Bash dentro de la VM Linux**. La secuencia del core es **MongoDB → Node.js → Open5GS → WebUI**. Las capturas se conservan en sus carpetas y en la [galería separada](docs/evidencias.md).
+Ejecuta los comandos en **Bash dentro de la VM Linux**, respetando el orden de las secciones. Abre terminales separadas para gNB, UE y pruebas cuando se indique.
 
 ## 01. Entorno del laboratorio
 
-Se utilizó DragonOS Focal R37 en VirtualBox. La VM terminó configurada con 5 vCPU y 10 GB de RAM. Las capturas de APT muestran repositorios **Jammy / Ubuntu 22.04**, aunque el nombre de DragonOS incluya “Focal”. Los repositorios de los pasos siguientes corresponden a esa base.
+Asigna 5 vCPU y 10 GB de RAM a la VM. Comprueba la base Ubuntu antes de añadir repositorios: los comandos de esta guía usan **Jammy / Ubuntu 22.04**.
 
-Como comprobación previa adicional, antes de añadir repositorios puedes consultar:
+Consulta la versión del sistema:
 
 ```bash
 cat /etc/os-release
@@ -64,27 +54,27 @@ lsb_release -a
 
 Si tu sistema muestra otra base Ubuntu, ajusta los repositorios a ella. No se necesita Docker para este montaje.
 
-## 02. Instalar el core
+## 02. INSTALACION DE OPEN5GS
 
 ### 02.1. MongoDB
 
-**Capturas Open5GS 01–06.** Primero se actualizaron los índices y se comprobaron las herramientas:
+Actualiza los índices e instala las herramientas para gestionar las claves:
 
 ```bash
 sudo apt-get update
 sudo apt-get install gnupg curl
 ```
 
-En el primer comando hubo conexiones HTTP rechazadas por el archivo de Ubuntu. Si ocurre al repetirlo, revisa el [diagnóstico de APT](docs/errores.md#apt-ppa-y-dns). El fallo de descarga no equivale a una instalación correcta de todos los índices.
+Si APT no puede descargar los índices, revisa el [diagnóstico de red](docs/errores.md#apt-ppa-y-dns) antes de continuar.
 
-**Complemento necesario:** la captura del repositorio MongoDB ya usa un keyring, pero no muestra cómo se importó. Si ese archivo aún no existe, se prepara así:
+Importa la clave pública de MongoDB si todavía no existe el keyring:
 
 ```bash
 curl -fsSL https://pgp.mongodb.com/server-8.0.asc \
   | sudo gpg -o /usr/share/keyrings/mongodb-server-8.0.gpg --dearmor
 ```
 
-Después se añadió el repositorio MongoDB 8.0 para Jammy y se instaló el paquete:
+Añade el repositorio de MongoDB 8.0 para Jammy, instala el paquete e inicia el servicio:
 
 ```bash
 echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-8.0.gpg ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/8.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-8.0.list
@@ -94,30 +84,30 @@ sudo systemctl start mongod
 sudo systemctl status mongod
 ```
 
-La salida mostró **active (running)**. El procedimiento fotografiado usa `start`; la habilitación automática al reiniciar se deja como [opción adicional](docs/complementos.md#inicio-automatico-de-mongodb).
+Comprueba que el servicio muestre **active (running)**. Para habilitarlo también al reiniciar, consulta el [inicio automático de MongoDB](docs/complementos.md#inicio-automatico-de-mongodb).
 
 ### 02.2. Node.js
 
-**Capturas Open5GS 07–08.** Después de MongoDB se preparó Node.js y se instaló:
+Con MongoDB funcionando, instala Node.js:
 
 ```bash
 curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
 sudo apt install nodejs
 ```
 
-La instalación fotografiada obtuvo **Node.js 18.20.8**. El propio instalador avisó que Node 18 está fuera de soporte. Estos comandos conservan la versión del ensayo; una actualización a una rama mantenida requiere validar la compatibilidad con la WebUI.
+El entorno de esta guía utiliza **Node.js 18.20.8**. Node 18 está fuera de soporte; si lo actualizas, valida la compatibilidad con la WebUI antes de continuar.
 
 ### 02.3. Open5GS
 
-**Captura Open5GS 09.** El primer intento fue el PPA:
+Primero intenta añadir el PPA de Open5GS:
 
 ```bash
 sudo add-apt-repository ppa:open5gs/latest
 ```
 
-Ese comando terminó con un error de conexión a Launchpad. No fue el método con el que se completó la instalación.
+Si el acceso a Launchpad devuelve un error de conexión, continúa con el repositorio OBS del bloque siguiente.
 
-**Capturas Open5GS 10–14.** Se continuó con el repositorio OBS para Ubuntu 22.04. La secuencia fue instalar herramientas, descargar y revisar la clave, crear el keyring y añadir el repositorio:
+Configura el repositorio OBS para Ubuntu 22.04: instala las herramientas, descarga la clave, compruébala y añade el repositorio. Esta guía utiliza OBS para instalar los paquetes:
 
 ```bash
 sudo apt install -y curl gnupg ca-certificates
@@ -132,7 +122,7 @@ apt-cache policy open5gs
 sudo apt install open5gs
 ```
 
-Se comprobaron los paquetes y los servicios en ese orden:
+Comprueba los paquetes instalados y sus servicios:
 
 ```bash
 dpkg -l | grep open5gs
@@ -140,28 +130,28 @@ systemctl --type=service --all | grep open5gs
 sudo service open5gs-* status
 ```
 
-La versión instalada fue **Open5GS 2.8.0**. El repositorio `latest` puede cambiar con el tiempo; la salida de `apt-cache policy` permite comprobar qué versión se instalará.
+Los archivos de configuración incluidos corresponden a **Open5GS 2.8.0**. Revisa `apt-cache policy open5gs`, porque el repositorio `latest` puede ofrecer una versión posterior.
 
-Antes de instalar la WebUI, las capturas 19–20 comprobaron las interfaces:
+Comprueba las interfaces antes de instalar la WebUI:
 
 ```bash
 sudo apt-get install net-tools
 ifconfig
 ```
 
-En esa VM aparecieron `enp0s3` con `10.0.2.15/24` y `ogstun` con `10.45.0.1/16`.
+En este laboratorio, la interfaz de VirtualBox es `enp0s3` con `10.0.2.15/24`, y la interfaz de datos del core es `ogstun` con `10.45.0.1/16`.
 
 ### 02.4. WebUI de Open5GS
 
-**Captura Open5GS 21.** Con MongoDB, Node.js y Open5GS instalados, se lanzó el instalador web:
+Con MongoDB, Node.js y Open5GS instalados, ejecuta el instalador de la WebUI:
 
 ```bash
 curl -fsSL https://open5gs.org/open5gs/assets/webui/install | sudo -E bash -
 ```
 
-El primer intento falló con `Could not resolve host: open5gs.org`. **Si DNS ya funciona, no necesitas aplicar el ajuste siguiente** y puedes continuar con el instalador.
+Si aparece `Could not resolve host: open5gs.org`, aplica el diagnóstico DNS siguiente. **Si la descarga funciona, pasa directamente a comprobar el servicio**.
 
-**Capturas Open5GS 22–25.** Para resolver aquel fallo, se inspeccionó la configuración DNS:
+Revisa la configuración DNS:
 
 ```bash
 resolvectl status
@@ -169,7 +159,7 @@ cat /etc/resolv.conf
 nmcli device show | grep -E 'GENERAL.DEVICE|IP4.DNS'
 ```
 
-Se aplicó este arreglo temporal en la interfaz de la VM y se comprobó la resolución:
+Aplica este ajuste temporal y comprueba la resolución:
 
 ```bash
 sudo resolvectl dns enp0s3 8.8.8.8 1.1.1.1
@@ -180,16 +170,16 @@ getent hosts open5gs.org
 curl -I --connect-timeout 10 https://open5gs.org
 ```
 
-El nombre `enp0s3` corresponde a esta VM; sustitúyelo si tu interfaz es distinta. Estos cambios DNS eran temporales.
+Sustituye `enp0s3` si tu interfaz tiene otro nombre. Este ajuste DNS es temporal.
 
-**Capturas Open5GS 26–29.** Se volvió a ejecutar el mismo instalador y se comprobó el servicio:
+Si tuviste que corregir DNS, vuelve a ejecutar el instalador. Después comprueba el servicio:
 
 ```bash
 curl -fsSL https://open5gs.org/open5gs/assets/webui/install | sudo -E bash -
 sudo systemctl status open5gs-webui
 ```
 
-La WebUI quedó **active (running)** y habilitada al arranque. El instalador creó su unidad systemd; no se escribió una unidad nueva a mano.
+El servicio debe mostrar **active (running)**. El instalador crea y habilita `open5gs-webui.service`.
 
 Abre **http://localhost:9999** en el navegador de la VM. Los datos iniciales de la guía son usuario `admin` y contraseña `1423`, si aún no se cambiaron. La WebUI se usará para registrar el abonado después de configurar la identidad del core.
 
@@ -197,13 +187,11 @@ Abre **http://localhost:9999** en el navegador de la VM. Los datos iniciales de 
 
 Al terminar esta instalación deben estar presentes los servicios de Open5GS, la WebUI y `ogstun`. La secuencia anterior ya los inspecciona con `dpkg`, `systemctl`, `service` e `ifconfig`.
 
-Se continúa ahora con OCUDU y después con la actualización de srsRAN 4G, siguiendo las carpetas de instalación del laboratorio. Los archivos de configuración del core se ajustan en el paso 06.
+Continúa con OCUDU y después actualiza srsRAN 4G. La configuración del core se ajusta en el paso 06.
 
 ## 04. Compilar OCUDU
 
 ### 04.1. Crear la carpeta y clonar
-
-**Capturas OCUDU 01–02.**
 
 ```bash
 git --version
@@ -214,7 +202,7 @@ git clone https://gitlab.com/ocudu/ocudu.git
 
 ### 04.2. Comprobar los archivos y las opciones
 
-**Capturas OCUDU 03–06.** Se comprobó primero que el árbol estuviera completo y después las opciones de compilación:
+Comprueba los archivos y las opciones de compilación:
 
 ```bash
 ls -la ~/srsran_project/ocudu
@@ -226,11 +214,9 @@ grep -n -i -E 'ZEROMQ|ENABLE_EXPORT|UHD|SRSRAN.*RF' CMakeLists.txt
 ls apps
 ```
 
-La VM ya tenía las dependencias SDR usadas por esta compilación. Si construyes en un sistema que no las tenga, consulta la [preparación adicional de dependencias](docs/complementos.md#dependencias-de-ocudu); esos comandos adicionales no se mezclan con la transcripción de las capturas.
+Si CMake indica que falta una biblioteca, instala las [dependencias de OCUDU](docs/complementos.md#dependencias-de-ocudu) y vuelve a configurar.
 
 ### 04.3. Configurar, compilar y comprobar
-
-**Capturas OCUDU 07–10.**
 
 ```bash
 cd ~/srsran_project/ocudu
@@ -243,13 +229,13 @@ cd ~/srsran_project/ocudu/build
 grep -E 'ENABLE_ZEROMQ:BOOL|ENABLE_UHD:BOOL' CMakeCache.txt
 ```
 
-La salida registrada fue **OCUDU 26.10.0 (`b78d09a77a`)**, con ambos drivers habilitados. Se utilizó `make -j2`, tal como en la captura. No se ejecutó `sudo make install`: el gNB se arranca desde su carpeta de compilación.
+Comprueba la versión y que `ENABLE_ZEROMQ` y `ENABLE_UHD` estén en `ON`. Este laboratorio usa **OCUDU 26.10.0 (`b78d09a77a`)**. El gNB se ejecutará desde `build/apps/gnb`; no necesita una instalación global.
 
-Los comandos históricos clonan la rama predeterminada. Para fijar las revisiones exactas del ensayo en otra instalación, los checkouts correspondientes están separados en [revisiones reproducibles](docs/complementos.md#fijar-las-revisiones-del-ensayo).
+Para usar exactamente las revisiones de este laboratorio, consulta los [checkouts por commit](docs/complementos.md#fijar-las-revisiones-del-ensayo) antes de compilar.
 
 ### 04.4. Inspeccionar el core desde la VM
 
-**Capturas OCUDU 11–15.** Tras compilar el gNB se inspeccionaron los servicios, los archivos, las direcciones y las rutas:
+Revisa los servicios, la configuración de red y las rutas:
 
 ```bash
 systemctl list-units --type=service --all 'open5gs-*' --no-pager
@@ -260,13 +246,11 @@ ip -br addr
 ip route
 ```
 
-En este punto el core aún mostraba MCC/MNC `999/70` y TAC `1`. Después se cambiarían a `001/01` y TAC `7` para coincidir con la celda.
+Si el core conserva MCC/MNC `999/70` y TAC `1`, cámbialos en el paso 06 a `001/01` y TAC `7` para que coincidan con la celda.
 
 ## 05. Actualizar srsRAN 4G
 
 ### 05.1. Identificar los binarios anteriores
-
-**Captura srsRAN 4G 00.**
 
 ```bash
 which srsenb
@@ -277,11 +261,11 @@ srsepc --version
 srsue --version
 ```
 
-Las rutas apuntaban a `/usr/local/bin/` y la versión era **23.4.0**. La consulta de `srsepc` produjo errores de configuración EPC; no se utiliza ese core para la conexión posterior, que usa Open5GS.
+La instalación anterior de DragonOS usa `/usr/local/bin/` y versión **23.4.0**. `srsepc` puede mostrar errores al no tener un EPC configurado; esta red utiliza Open5GS.
 
 ### 05.2. Instalar las dependencias
 
-**Captura srsRAN 4G 01.** Las dependencias de esta actualización se instalaron aquí, después de comprobar los binarios:
+Instala las dependencias de srsRAN 4G:
 
 ```bash
 sudo apt update
@@ -294,7 +278,7 @@ sudo apt install -y \
 
 ### 05.3. Clonar y comprobar el tag inicial
 
-**Captura srsRAN 4G 02.** En el historial se eliminó un árbol anterior con `rm -rf srsRAN_4G_ocudu` antes de clonar. Ese comando se conserva en el [registro histórico](docs/complementos.md#borrado-en-la-captura-original), no como requisito para actualizar: trabaja en una carpeta nueva si ya tienes archivos que conservar.
+Clona el código en una carpeta nueva. Si `~/srsRAN_4G_ocudu` ya contiene trabajo, consérvalo antes de repetir el clon.
 
 ```bash
 cd ~
@@ -304,11 +288,9 @@ git tag | grep 23_11
 git checkout release_23_11
 ```
 
-La primera comprobación quedó en `release_23_11`. El proceso no terminó en ese tag: la siguiente captura cambia a `master`.
+Después de comprobar `release_23_11`, cambia a `master` para continuar con la versión nueva.
 
 ### 05.4. Cambiar a master y configurar
-
-**Captura srsRAN 4G 03.**
 
 ```bash
 cd ~/srsRAN_4G_ocudu
@@ -319,11 +301,9 @@ mkdir -p build && cd build
 cmake ..
 ```
 
-La revisión fotografiada fue `bef8680d5`, descrita como `release_25_10-14-gbef8680d5`. El CMake de esa revisión usa Release y habilita ZeroMQ por defecto; por eso se conserva `cmake ..`, sin añadir flags que no aparecen en el comando original.
+La revisión usada aquí es `bef8680d5`, descrita como `release_25_10-14-gbef8680d5`. Su CMake usa Release y habilita ZeroMQ por defecto.
 
 ### 05.5. Compilar y localizar el ejecutable nuevo
-
-**Capturas srsRAN 4G 04–06.**
 
 ```bash
 cmake --build . -j"$(nproc)"
@@ -331,7 +311,7 @@ find ~/srsRAN_4G_ocudu/build -type f -name srsue -executable
 ./srsue/src/srsue --version
 ```
 
-El ejecutable compilado mostró **Version 25.10.0** y ZeroMQ entre sus plugins activos. La ruta de la prueba fue `/home/josue2/srsRAN_4G_ocudu/build/srsue/src/srsue`.
+Comprueba **Version 25.10.0** y ZeroMQ entre los plugins activos. El ejecutable queda en `~/srsRAN_4G_ocudu/build/srsue/src/srsue`.
 
 Desde ahora se usa `~/srsRAN_4G_ocudu/build/srsue/src/srsue`; escribir solo `srsue` puede seguir lanzando la versión anterior de `/usr/local/bin`. No se reemplazó esa instalación mediante `make install`.
 
@@ -354,11 +334,11 @@ Después de compilar ambos programas se comprueba y ajusta la identidad del core
 | `ogstun` en la VM | `10.45.0.1/16` | Gateway de datos; MTU observado 1400 |
 | `tun_srsue` en `ue1` | `10.45.0.3/24` en la prueba | IP de sesión dinámica; máscara de `[gw]` |
 
-Las IP de core se confirman en los archivos finales. Los puertos de N3/N4 omitidos en YAML son los valores de protocolo predeterminados, no una captura de sockets. No se ha definido un bind N3 explícito del gNB en `gnb_zmq.yaml`.
+N3 y N4 usan sus puertos predeterminados cuando el YAML no define otro. `gnb_zmq.yaml` configura el bind N2 en `127.0.0.1`; no define un bind N3 explícito.
 
 ### 06.1. Verificar los valores iniciales
 
-En el mapa de conexión, después de instalar los programas se consultaron estos valores:
+Comprueba los servicios, la dirección del AMF y la interfaz de datos:
 
 ```bash
 systemctl list-units | grep -i open5gs
@@ -374,7 +354,7 @@ sudo cp /etc/open5gs/nrf.yaml /etc/open5gs/nrf.yaml.bak
 sudo nano /etc/open5gs/amf.yaml
 ```
 
-En el AMF se cambian los bloques **guami**, **tai** y **plmn_support** a MCC `001` / MNC `01`. En `tai` se fija TAC `7`; en `plmn_support`, SST `1`. Se conserva NGAP en `127.0.0.5`.
+En el AMF cambia los bloques **guami**, **tai** y **plmn_support** a MCC `001` / MNC `01`. En `tai` se fija TAC `7`; en `plmn_support`, SST `1`. Se conserva NGAP en `127.0.0.5`.
 
 El contenido completo final está en [config/open5gs/amf.yaml](config/open5gs/amf.yaml). Los bloques `999/70` que permanezcan en comentarios son ejemplos, no configuración activa. Conserva los ceros iniciales de MCC/MNC.
 
@@ -384,22 +364,22 @@ El contenido completo final está en [config/open5gs/amf.yaml](config/open5gs/am
 sudo nano /etc/open5gs/nrf.yaml
 ```
 
-En `nrf.serving`, el `plmn_id` queda con MCC `001` y MNC `01`. Se conserva el servidor SBI `127.0.0.10:7777`. Después se reiniciaron los dos servicios modificados:
+En `nrf.serving`, el `plmn_id` queda con MCC `001` y MNC `01`. Se conserva el servidor SBI `127.0.0.10:7777`. Reinicia los dos servicios modificados:
 
 ```bash
 sudo systemctl restart open5gs-nrfd open5gs-amfd
 systemctl is-active open5gs-nrfd open5gs-amfd
 ```
 
-La salida mostró dos líneas `active`.
+Comprueba que ambos servicios respondan `active`.
 
-Los otros archivos finales, [smf.yaml](config/open5gs/smf.yaml) y [upf.yaml](config/open5gs/upf.yaml), documentan PFCP entre `127.0.0.4` y `127.0.0.7`, GTP-U en `127.0.0.7`, pool `10.45.0.0/16` y gateway `10.45.0.1`. No se inventa un cambio manual de esos archivos que no aparezca en las capturas.
+Comprueba también [smf.yaml](config/open5gs/smf.yaml) y [upf.yaml](config/open5gs/upf.yaml): PFCP entre `127.0.0.4` y `127.0.0.7`, GTP-U en `127.0.0.7`, pool `10.45.0.0/16` y gateway `10.45.0.1`.
 
 Los cuatro YAML originales quedan disponibles en `config/open5gs/` para consultar o restaurar la configuración del laboratorio. Una [copia directa de los archivos](docs/complementos.md#copiar-las-configuraciones-entregadas) es una alternativa adicional, separada de la edición manual que se hizo en el ensayo.
 
 ## 07. Registrar el abonado
 
-Antes de dar de alta el abonado se comprobó la WebUI:
+Comprueba la WebUI antes de registrar el abonado:
 
 ```bash
 sudo systemctl status open5gs-webui
@@ -420,10 +400,9 @@ En la WebUI de la VM, abre **Subscriber → +**, configura los siguientes valore
 
 Son credenciales de prueba del ejemplo, también presentes en el archivo UE. El campo de autenticación `AMF=8000` no es la dirección de la función de red AMF. No fijes como IP estática `10.45.0.3`: fue la IP asignada en la prueba.
 
-
 ## 08. Configurar gNB y UE
 
-Los archivos se crean después de registrar el abonado. Se usan los valores finales de 5 MHz, conservando el método `cat` con heredoc de las capturas; los intentos de 20 y 10 MHz quedan explicados en [errores](docs/errores.md#muestreo-prb-y-coreset0).
+Crea los archivos para una celda de 5 MHz, con 25 PRB y 5,76 MS/s en ambos extremos.
 
 ### 08.1. Crear la configuración del gNB
 
@@ -521,7 +500,7 @@ ip_netmask = 255.255.255.0
 EOF
 ```
 
-Archivo final incluido: [config/ue_zmq.conf](config/ue_zmq.conf). Ambos archivos de `config/` conservan exactamente el contenido entregado desde la VM.
+Archivo final incluido: [config/ue_zmq.conf](config/ue_zmq.conf). También puedes usar los archivos completos incluidos en `config/`.
 
 ### Comprobar coherencia antes de ejecutar
 
@@ -538,7 +517,7 @@ grep -nE 'srate|channel_bandwidth|coreset0|mcs_table' ~/zmq_test/gnb_zmq.yaml
 grep -nE 'srate|prb|netns|ip_devname' ~/zmq_test/ue_zmq.conf
 ```
 
-Los archivos finales **no añaden parámetros SSB al UE**. La revisión de srsUE usada ya tiene valores por defecto DL ARFCN 368500 y SSB ARFCN 368410, coincidentes con las salidas. La discrepancia con el chat de asistencia se explica en [errores y correcciones](docs/errores.md#ssb-y-el-chat-de-asistencia).
+Esta revisión de srsUE usa por defecto DL ARFCN **368500** y SSB ARFCN **368410**, coincidentes con la celda configurada. No hace falta añadir opciones SSB al archivo UE para este perfil.
 
 ## 09. Arrancar la red
 
@@ -593,7 +572,7 @@ cd ~/zmq_test
 sudo ~/srsRAN_4G_ocudu/build/srsue/src/srsue ue_zmq.conf
 ```
 
-Secuencia de éxito observada en la captura de conexión 22:
+Espera la confirmación de acceso, conexión RRC y sesión PDU:
 
 ```text
 Random Access Complete.
@@ -608,7 +587,7 @@ Para diagnóstico puedes añadir `--log.filename=stdout --log.all_level=info`; n
 
 ## 10. Configurar las rutas
 
-Con la sesión del UE activa se añadió primero la ruta por defecto y después se comprobaron las tablas:
+Con la sesión activa, añade la ruta por defecto y comprueba las tablas:
 
 ```bash
 sudo ip netns exec ue1 ip route add default via 10.45.0.1 dev tun_srsue
@@ -616,7 +595,7 @@ sudo ip netns exec ue1 route -n
 route -n | grep 10.45
 ```
 
-La captura repite el primer comando y obtiene `RTNETLINK answers: File exists`, porque la ruta ya estaba añadida. No es necesario repetirlo. Si falta la interfaz, comprueba antes la sesión con `sudo ip netns exec ue1 ip addr show tun_srsue`.
+Si aparece `RTNETLINK answers: File exists`, comprueba la tabla: la ruta puede estar ya añadida. Si falta la interfaz, revisa la sesión con `sudo ip netns exec ue1 ip addr show tun_srsue`.
 
 En `ue1` se espera una ruta por defecto vía `10.45.0.1` y una ruta conectada `10.45.0.0/24` por `tun_srsue`. En el host ya existe `10.45.0.0/16` por `ogstun`. La máscara `/24` del UE y el pool `/16` del core son exactamente los de esta prueba.
 
@@ -632,14 +611,13 @@ sudo ip netns exec ue1 ping 10.45.0.1 -c 4
 
 ### Iniciar ping desde el host hacia el UE (DL)
 
-En la sesión fotografiada la IP era `10.45.0.3`. Usa la obtenida en el paso anterior si cambia:
+Sustituye `10.45.0.3` por la dirección que haya recibido tu UE si es distinta:
 
 ```bash
 ping 10.45.0.3 -c 4
 ```
 
-
-| Prueba de la captura | Enviados / recibidos | Pérdida | RTT medio |
+| Prueba del laboratorio | Enviados / recibidos | Pérdida | RTT medio |
 |---|---|---|---|
 | Desde `ue1` hacia `10.45.0.1` | 4 / 4 | 0 % | 358,567 ms |
 | Desde el host hacia `10.45.0.3` | 4 / 4 | 0 % | 214,461 ms |
@@ -648,7 +626,7 @@ Cada ping incluye solicitud y respuesta; UL/DL indica el lado que lo inicia. Est
 
 ## 12. Medir con iPerf3
 
-La captura de iPerf3 muestra primero la instalación y después el servidor:
+Instala iPerf3 y arranca el servidor:
 
 ```bash
 sudo apt install -y iperf3
@@ -657,13 +635,13 @@ iperf3 -s -i 1
 
 El servidor corre en el host de la VM, fuera de `ue1`, y escucha en el puerto 5201.
 
-En otra terminal se lanza el cliente dentro del namespace. La captura corta parte de sus argumentos; no permite transcribirlos todos. Este comando mínimo es un ejemplo completo para repetir la conexión TCP al mismo destino:
+En otra terminal, inicia el cliente TCP dentro del namespace:
 
 ```bash
 sudo ip netns exec ue1 iperf3 -c 10.45.0.1
 ```
 
-La captura acredita tráfico, pero no incluye un resumen final completo. El chat describe una prueba UDP a 3 Mbit/s con pérdidas altas; no se presenta como benchmark sin sus salidas completas. Las pruebas TCP/UDP adicionales, con duración y carga controladas, están en [complementos](docs/complementos.md#pruebas-adicionales-de-iperf3).
+Espera el resumen final del emisor y del receptor antes de evaluar el rendimiento. Para pruebas TCP/UDP con duración y carga controladas, consulta [iPerf3 adicional](docs/complementos.md#pruebas-adicionales-de-iperf3).
 
 El nombre DNN `internet` no demuestra acceso WAN: lo validado aquí es conectividad local entre UE y core.
 
@@ -693,4 +671,4 @@ Se genera una carpeta local `estado-vm-*`, ignorada por Git, con versiones, arch
 - [srsUE: opciones en el commit usado](https://github.com/srsran/srsRAN_4G/blob/bef8680d5f9714f3e040e6f9cbc88d7888439b6d/srsue/src/main.cc).
 - [Repositorio que inspiró la presentación](https://github.com/devopsjourney23/my-srsproject-demo).
 
-Consulta [versions.json](versions.json) para las revisiones y [procedencia](docs/procedencia.md) para distinguir capturas, archivos finales y ajustes de esta edición. Las herramientas enlazadas conservan sus propias licencias. No se incluyen sus binarios ni su código fuente.
+Consulta [versions.json](versions.json) para las revisiones de los programas y [errores frecuentes](docs/errores.md) si necesitas diagnosticar la conexión. Las herramientas enlazadas conservan sus propias licencias.

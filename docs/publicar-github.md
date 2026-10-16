@@ -51,7 +51,8 @@ dragonos-5g-sa-zmq/
 ├── .gitignore
 ├── assets/
 │   ├── arquitectura.png
-│   └── arquitectura.pdf
+│   ├── arquitectura.pdf
+│   └── ocudu-zmq.jpg
 ├── config/
 │   ├── gnb_zmq.yaml
 │   ├── ue_zmq.conf
@@ -77,7 +78,7 @@ dragonos-5g-sa-zmq/
 
 El ZIP entregado contiene esta estructura sin metadatos `.git`. Se puede usar como copia descargable del tutorial.
 
-El README no inserta imágenes. Para añadir después la figura oficial, guarda el archivo como `assets/ocudu-zmq.jpg` y sigue [estas instrucciones](imagenes.md). El JPG queda pendiente de que lo agregues tú; no hay un enlace de imagen roto ni un archivo ficticio en el paquete.
+El README muestra solo la figura oficial incluida en `assets/ocudu-zmq.jpg`. Mantén ese nombre y ruta al copiar o subir los archivos. Las imágenes de instalación y conexión permanecen en sus carpetas y en la galería separada. Consulta [la ubicación de la figura](imagenes.md) si no aparece después de publicar.
 
 ## Actualizar un repositorio que ya subiste
 

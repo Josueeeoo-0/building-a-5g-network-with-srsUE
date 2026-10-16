@@ -8,8 +8,8 @@ Fecha: 16/10/2026.
 - Integridad SHA-256: 80 imágenes; los seis archivos finales son idénticos a los originales.
 - Todas las opciones del UE existen en el parser del commit fijado; las tres opciones SSB del chat no se incorporaron.
 - Los heredocs completos de gNB y UE reproducen los archivos entregados.
-- README sin imágenes insertadas, espacio JPG reservado y orden MongoDB → Node.js → Open5GS → WebUI; comandos históricos restaurados.
-- Enlaces y anclas locales: 129 destinos válidos, incluidas las 80 imágenes de la galería.
+- README práctico sin referencias a capturas; única imagen oficial activa y orden MongoDB → Node.js → Open5GS → WebUI conservado.
+- Enlaces y anclas locales: 124 destinos válidos, incluidas las 80 imágenes de la galería.
 - Script de diagnóstico: bash -n sin errores y saltos de línea LF.
 - Sintaxis Bash: 41 bloques del README válidos; solo analizados, no ejecutados.
 - Figura: una página vectorial con UPF 127.0.0.7; PNG revisado visualmente.

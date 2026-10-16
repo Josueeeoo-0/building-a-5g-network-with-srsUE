@@ -2,11 +2,11 @@
 
 [Volver al tutorial](../README.md)
 
-El README está preparado sin imágenes insertadas. Las 80 capturas originales siguen en `images/` y se pueden consultar en la [galería](evidencias.md).
+El README muestra únicamente la figura oficial de arquitectura. Las 80 imágenes originales siguen en `images/` y se pueden consultar en la [galería](evidencias.md), sin insertarse en el tutorial principal.
 
 ## Archivo para la portada
 
-Guarda la figura de la sección **ZeroMQ-based Setup** del [tutorial oficial de OCUDU](https://docs.ocudu.org/tutorials/srsue/) con esta ruta relativa a la raíz del repositorio:
+La figura de la sección **ZeroMQ-based Setup** del [tutorial oficial de OCUDU](https://docs.ocudu.org/tutorials/srsue/) está incluida con esta ruta relativa a la raíz del repositorio:
 
 ```text
 assets/ocudu-zmq.jpg
@@ -14,16 +14,20 @@ assets/ocudu-zmq.jpg
 
 El nombre exacto es **ocudu-zmq.jpg**. Usa una imagen realmente guardada o exportada como JPEG; cambiar solamente la extensión de un PNG no lo convierte a JPG.
 
-## Espacio reservado en el README
+## Inserción activa en el README
 
-Al principio del README hay un comentario que dice `FIGURA PRINCIPAL RESERVADA`. Cuando hayas añadido el JPG, reemplaza ese comentario y el párrafo del espacio reservado por estas líneas:
+El README ya contiene estas líneas activas:
 
 ```markdown
-![Arquitectura ZeroMQ de referencia de OCUDU](assets/ocudu-zmq.jpg)
+![Arquitectura ZeroMQ de OCUDU](assets/ocudu-zmq.jpg)
 
-Fuente: [tutorial oficial de OCUDU](https://docs.ocudu.org/tutorials/srsue/).
+Fuente de la figura: [tutorial oficial de OCUDU](https://docs.ocudu.org/tutorials/srsue/).
 ```
 
-Ese bloque es una instrucción para editar el README en el futuro; el JPG aún no se incluye ni se intenta mostrar ahora. La figura oficial resume la arquitectura general: los valores específicos de esta VM se explican en el texto y las configuraciones.
+La versión anterior tenía solo un comentario con el espacio reservado: copiar el JPG no activaba su visualización. Esta edición incluye tanto el archivo como la inserción Markdown, por lo que no necesitas editar el README para que aparezca.
+
+Al subir el tutorial, conserva `README.md` en la raíz y `ocudu-zmq.jpg` dentro de `assets/`. Comprueba que Git incluya ambos con `git status`; en GitHub las mayúsculas y minúsculas del nombre deben coincidir.
+
+La figura resume la arquitectura general. Los valores de esta VM se explican en el texto y en los archivos de configuración.
 
 Los diagramas de la edición anterior permanecen en `assets/arquitectura.png` y `assets/arquitectura.pdf` como archivos separados, sin aparecer en el README.

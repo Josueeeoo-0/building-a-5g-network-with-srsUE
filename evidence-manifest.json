@@ -516,6 +516,12 @@
       "source": "codex-clipboard-8da73b2a-18b9-43f2-9d45-cbf6e35dff92.png",
       "path": "images/connection/29.png",
       "sha256": "94e261d755c9b8e06136b9c153048ec6094610c1ad8f9028c3cc6d282ce8b302"
+    },
+    {
+      "kind": "reference_architecture",
+      "source": "ocudu-zmq.jpg",
+      "path": "assets/ocudu-zmq.jpg",
+      "sha256": "86f2a6d970aa22ac37efd30746bbf6e00f4dba8a05a014668b88e6ee0036114a"
     }
   ]
 }
