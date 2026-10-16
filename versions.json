@@ -1,56 +1,33 @@
 {
-  "documented_at": "2026-10-16",
-  "system": {
-    "declared": "DragonOS Focal R37",
-    "apt_codename_observed": "jammy",
-    "os_release_capture_received": false,
-    "virtualization": "VirtualBox",
-    "vcpu_assigned": 5,
-    "ram_assigned_gb": 10
-  },
+  "system": "DragonOS Focal R37 / base Jammy de este laboratorio",
+  "virtualization": "VirtualBox",
   "ocudu": {
-    "version_observed": "26.10.0",
+    "version": "26.10.0",
     "repository": "https://gitlab.com/ocudu/ocudu.git",
-    "commit": "b78d09a77ab060cda752f32483e551f1e9132f66",
-    "flags_observed": [
-      "ENABLE_ZEROMQ=ON",
-      "ENABLE_UHD=ON"
-    ]
+    "commit": "b78d09a77ab060cda752f32483e551f1e9132f66"
   },
   "srsran4g": {
-    "version_observed": "25.10.0",
+    "version": "25.10.0",
     "repository": "https://github.com/srsran/srsRAN_4G.git",
-    "commit": "bef8680d5f9714f3e040e6f9cbc88d7888439b6d",
-    "describe_observed": "release_25_10-14-gbef8680d5",
-    "old_path_binary_version": "23.4.0"
+    "commit": "bef8680d5f9714f3e040e6f9cbc88d7888439b6d"
   },
   "open5gs": {
-    "version_observed": "2.8.0",
-    "installation": "OBS xUbuntu_22.04 native packages",
-    "repository_is_mutable": true
+    "version": "2.8.0",
+    "installation": "Paquetes nativos OBS para xUbuntu_22.04"
   },
   "mongodb": {
-    "branch_observed": "8.0",
-    "exact_package_version_captured": false
+    "branch": "8.0"
   },
   "nodejs": {
-    "version_observed": "18.20.8",
-    "status_at_documentation": "EOL; historical reproduction only"
+    "version": "18.20.8",
+    "support": "EOL; validar compatibilidad antes de actualizar"
   },
-  "toolchain": {
-    "gcc_observed": "11.4.0",
-    "git_observed": "2.34.1"
-  },
-  "configuration": {
+  "radio": {
+    "band": 3,
+    "duplex": "FDD",
     "bandwidth_mhz": 5,
     "scs_khz": 15,
     "prb": 25,
-    "sample_rate_sps": 5760000,
-    "plmn": "00101",
-    "tac": 7,
-    "core_pool": "10.45.0.0/16",
-    "upf_gtpu": "127.0.0.7",
-    "ue_ip_in_capture": "10.45.0.3"
-  },
-  "validation_scope": "Original runtime captured by author; this edition checked statically, not reinstalled."
+    "sample_rate_sps": 5760000
+  }
 }

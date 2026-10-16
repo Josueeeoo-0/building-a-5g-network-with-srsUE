@@ -37,7 +37,8 @@ Los archivos completos están en [config/](config/). La instalación sigue este 
 11. [Probar la conectividad](#11-probar-la-conectividad)
 12. [Prueba con iPerf3](#12-medir-con-iperf3)
 13. [Detener y volver a arrancar](#13-detener-y-volver-a-arrancar)
-14. [Referencias](#14-referencias)
+14. [Solución de problemas](#14-solucion-de-problemas)
+15. [Referencias](#15-referencias)
 
 Ejecuta los comandos en **Bash dentro de la VM Linux**, respetando el orden de las secciones. Abre terminales separadas para gNB, UE y pruebas cuando se indique.
 
@@ -65,7 +66,7 @@ sudo apt-get update
 sudo apt-get install gnupg curl
 ```
 
-Si APT no puede descargar los índices, revisa el [diagnóstico de red](docs/errores.md#apt-ppa-y-dns) antes de continuar.
+Si APT no puede descargar los índices, revisa el [diagnóstico de red](#141-apt-ppa-y-dns) antes de continuar.
 
 Importa la clave pública de MongoDB si todavía no existe el keyring:
 
@@ -84,7 +85,7 @@ sudo systemctl start mongod
 sudo systemctl status mongod
 ```
 
-Comprueba que el servicio muestre **active (running)**. Para habilitarlo también al reiniciar, consulta el [inicio automático de MongoDB](docs/complementos.md#inicio-automatico-de-mongodb).
+Comprueba que el servicio muestre **active (running)**. Si quieres iniciarlo automáticamente al reiniciar la VM, ejecuta `sudo systemctl enable mongod`.
 
 ### 02.2. Node.js
 
@@ -214,7 +215,7 @@ grep -n -i -E 'ZEROMQ|ENABLE_EXPORT|UHD|SRSRAN.*RF' CMakeLists.txt
 ls apps
 ```
 
-Si CMake indica que falta una biblioteca, instala las [dependencias de OCUDU](docs/complementos.md#dependencias-de-ocudu) y vuelve a configurar.
+Si CMake indica que falta una biblioteca, instala las [dependencias de OCUDU](#142-dependencias-y-compilacion) y vuelve a configurar.
 
 ### 04.3. Configurar, compilar y comprobar
 
@@ -231,7 +232,7 @@ grep -E 'ENABLE_ZEROMQ:BOOL|ENABLE_UHD:BOOL' CMakeCache.txt
 
 Comprueba la versión y que `ENABLE_ZEROMQ` y `ENABLE_UHD` estén en `ON`. Este laboratorio usa **OCUDU 26.10.0 (`b78d09a77a`)**. El gNB se ejecutará desde `build/apps/gnb`; no necesita una instalación global.
 
-Para usar exactamente las revisiones de este laboratorio, consulta los [checkouts por commit](docs/complementos.md#fijar-las-revisiones-del-ensayo) antes de compilar.
+Las revisiones completas están en [versions.json](versions.json). Para fijar OCUDU antes de compilar, usa `git checkout b78d09a77ab060cda752f32483e551f1e9132f66` dentro de su repositorio.
 
 ### 04.4. Inspeccionar el core desde la VM
 
@@ -301,7 +302,7 @@ mkdir -p build && cd build
 cmake ..
 ```
 
-La revisión usada aquí es `bef8680d5`, descrita como `release_25_10-14-gbef8680d5`. Su CMake usa Release y habilita ZeroMQ por defecto.
+La revisión usada aquí es `bef8680d5`, descrita como `release_25_10-14-gbef8680d5`. Su CMake usa Release y habilita ZeroMQ por defecto. Para fijar esa revisión antes de compilar, usa `git checkout bef8680d5f9714f3e040e6f9cbc88d7888439b6d` dentro del repositorio de srsRAN 4G.
 
 ### 05.5. Compilar y localizar el ejecutable nuevo
 
@@ -375,7 +376,7 @@ Comprueba que ambos servicios respondan `active`.
 
 Comprueba también [smf.yaml](config/open5gs/smf.yaml) y [upf.yaml](config/open5gs/upf.yaml): PFCP entre `127.0.0.4` y `127.0.0.7`, GTP-U en `127.0.0.7`, pool `10.45.0.0/16` y gateway `10.45.0.1`.
 
-Los cuatro YAML originales quedan disponibles en `config/open5gs/` para consultar o restaurar la configuración del laboratorio. Una [copia directa de los archivos](docs/complementos.md#copiar-las-configuraciones-entregadas) es una alternativa adicional, separada de la edición manual que se hizo en el ensayo.
+Los cuatro archivos completos están en `config/open5gs/`. Úsalos como referencia al editar los archivos de `/etc/open5gs/`.
 
 ## 07. Registrar el abonado
 
@@ -641,7 +642,27 @@ En otra terminal, inicia el cliente TCP dentro del namespace:
 sudo ip netns exec ue1 iperf3 -c 10.45.0.1
 ```
 
-Espera el resumen final del emisor y del receptor antes de evaluar el rendimiento. Para pruebas TCP/UDP con duración y carga controladas, consulta [iPerf3 adicional](docs/complementos.md#pruebas-adicionales-de-iperf3).
+Espera el resumen final del emisor y del receptor antes de evaluar el rendimiento.
+
+Para limitar una prueba TCP a 30 segundos:
+
+```bash
+sudo ip netns exec ue1 iperf3 -c 10.45.0.1 -t 30 -i 1
+```
+
+Después de terminarla, puedes probar el sentido inverso:
+
+```bash
+sudo ip netns exec ue1 iperf3 -c 10.45.0.1 -t 30 -i 1 -R
+```
+
+Para UDP, empieza con una carga moderada:
+
+```bash
+sudo ip netns exec ue1 iperf3 -c 10.45.0.1 -u -b 300K -t 30 -i 1
+```
+
+Evalúa la tasa recibida. En UDP revisa también jitter y pérdida; en TCP, retransmisiones.
 
 El nombre DNN `internet` no demuestra acceso WAN: lo validado aquí es conectividad local entre UE y core.
 
@@ -662,7 +683,108 @@ bash scripts/recoger-estado.sh
 
 Se genera una carpeta local `estado-vm-*`, ignorada por Git, con versiones, archivos e interfaces para diagnóstico. No incluye `.env` de WebUI ni un dump de MongoDB.
 
-## 14. Referencias
+## 14. SOLUCION DE PROBLEMAS
+
+### 14.1. APT PPA y DNS
+
+| Error | Acción |
+|---|---|
+| `Connection refused` al acceder a `archive.ubuntu.com:80` | Revisa la conectividad y el acceso HTTP al repositorio. No lo confundas con un error DNS. |
+| `ConnectionRefusedError` al añadir el PPA de Open5GS | Usa el repositorio OBS de la sección 02.3 para la base Ubuntu correspondiente. |
+| `Could not resolve host: open5gs.org` | Revisa `resolvectl` y aplica el ajuste DNS de la sección 02.4 si corresponde. |
+| APT conserva índices antiguos | Repite `sudo apt-get update` después de corregir la conectividad y comprueba que pueda descargar los índices necesarios. |
+
+El DNS temporal configurado con `resolvectl` puede perderse al reiniciar. Si vuelve a fallar la resolución, revisa la conexión de NetworkManager y su configuración DNS.
+
+### 14.2. Dependencias y compilacion
+
+Si CMake no encuentra las bibliotecas del gNB, instala las dependencias y vuelve a ejecutar la configuración:
+
+```bash
+sudo apt update
+sudo apt install -y \
+  git build-essential cmake pkg-config \
+  libfftw3-dev libmbedtls-dev libsctp-dev libyaml-cpp-dev libgtest-dev \
+  libzmq3-dev libuhd-dev
+```
+
+Si la compilación agota la memoria, reduce el paralelismo. En el directorio de construcción:
+
+```bash
+cmake --build . -j2
+```
+
+Antes de conectar el UE, comprueba que el gNB y srsUE incluyan ZeroMQ entre los drivers o plugins disponibles.
+
+### 14.3. srsUE sigue mostrando 23.4.0
+
+La instalación de DragonOS puede seguir resolviendo a `/usr/local/bin/srsue`. Comprueba ambas versiones:
+
+```bash
+command -v srsue
+srsue --version
+~/srsRAN_4G_ocudu/build/srsue/src/srsue --version
+```
+
+Ejecuta el último binario por su ruta completa. No necesitas eliminar la instalación anterior. `srsepc` no participa en esta red: el core es Open5GS.
+
+### 14.4. Ancho de banda muestreo y CORESET
+
+| Síntoma | Corrección |
+|---|---|
+| Tasa insuficiente para un canal de 20 MHz | Mantén el perfil de esta guía: 5 MHz y 5,76 MS/s en ambos extremos. |
+| No se puede derivar una combinación válida SSB/Point A | Revisa ancho, frecuencia y CORESET#0. El perfil de 5 MHz incluido utiliza índice 0. |
+| Error de tabla 256QAM con DCI fallback | Configura `mcs_table: qam64` en PDSCH y PUSCH. |
+| El UE no detecta la celda | Comprueba banda, ARFCN, tasa y puertos ZeroMQ cruzados. |
+
+Para el perfil de 5 MHz, `max_nof_prb` y `nof_prb` deben ser **25**, no 52. El ancho de banda no se deduce únicamente de `base_srate`; revisa también `channel_bandwidth_MHz` en el gNB.
+
+El índice CORESET debe ser válido para la combinación completa de parámetros. No reutilices sin revisar el índice de un perfil de otro ancho de banda.
+
+### 14.5. Opciones SSB del UE
+
+En la revisión de srsUE usada aquí, DL ARFCN 368500 y SSB ARFCN 368410 ya son valores por defecto. Las opciones de frecuencia reconocidas son `dl_nr_arfcn` y `ssb_nr_arfcn`; para la separación de subportadoras se utilizan `scs` y `ssb_scs`.
+
+No añadas `ssb_nr_scs`, `ssb_nr_pattern` ni `ssb_nr_duplex_mode`: esos nombres no están registrados en el parser de esta revisión. El archivo incluido funciona con sus parámetros NR esenciales.
+
+### 14.6. Namespace interfaz TUN y sesion
+
+Si aparece `Failed to setup/configure GW interface`, verifica el namespace y la interfaz:
+
+```bash
+sudo ip netns list
+sudo ip netns exec ue1 ip addr show tun_srsue
+sudo ip netns exec ue1 ip route
+```
+
+Si no existe `ue1`, créalo antes de iniciar srsUE. Ejecuta srsUE con `sudo` desde la red principal de la VM, usando `[gw] netns = ue1` para su interfaz TUN.
+
+`RRC Connected` por sí solo no confirma una sesión de datos. Comprueba también la asignación de IP y la presencia de `tun_srsue`. Si no se establece la sesión PDU, revisa que IMSI, K, OPc, DNN y SST coincidan con el abonado de Open5GS.
+
+### 14.7. Ruta existente o IP incorrecta
+
+`RTNETLINK answers: File exists` al repetir `ip route add` puede indicar que la ruta ya está creada. Comprueba la tabla y, si necesitas reemplazarla, ejecuta:
+
+```bash
+sudo ip netns exec ue1 ip route replace default via 10.45.0.1 dev tun_srsue
+```
+
+La dirección del UE puede cambiar al reconectar. Consulta la IP actual antes del ping desde el host; no asumas que sigue siendo `10.45.0.3` ni uses automáticamente la dirección de otro ejemplo.
+
+El host debe llegar a `10.45.0.0/16` por `ogstun`. No desactives esa interfaz ni añadas la ruta Docker vía `10.53.1.2` en esta instalación nativa.
+
+### 14.8. Latencia alta o perdida en iPerf3
+
+Una VM con poca RAM o CPU disponible puede degradar la prueba. Cierra aplicaciones innecesarias, revisa la carga y conserva el perfil de 5 MHz antes de aumentar el ancho de banda.
+
+```bash
+free -h
+top
+```
+
+El retraso de procesamiento es una causa posible, no un diagnóstico automático. Comprueba también configuración, rutas y resúmenes del receptor. Si UDP pierde paquetes a una tasa alta, prueba 300 Kbit/s y compara el resultado completo de ambos extremos.
+
+## 15. Referencias
 
 - [OCUDU: tutorial oficial con srsUE](https://docs.ocudu.org/tutorials/srsue/).
 - [OCUDU: instalación](https://docs.ocudu.org/user_manual/installation/). Las opciones y requisitos actuales pueden variar respecto del commit fijado aquí.
@@ -671,4 +793,4 @@ Se genera una carpeta local `estado-vm-*`, ignorada por Git, con versiones, arch
 - [srsUE: opciones en el commit usado](https://github.com/srsran/srsRAN_4G/blob/bef8680d5f9714f3e040e6f9cbc88d7888439b6d/srsue/src/main.cc).
 - [Repositorio que inspiró la presentación](https://github.com/devopsjourney23/my-srsproject-demo).
 
-Consulta [versions.json](versions.json) para las revisiones de los programas y [errores frecuentes](docs/errores.md) si necesitas diagnosticar la conexión. Las herramientas enlazadas conservan sus propias licencias.
+Consulta [versions.json](versions.json) para las revisiones de los programas y [solución de problemas](#14-solucion-de-problemas) si necesitas diagnosticar la conexión. Las herramientas enlazadas conservan sus propias licencias.
